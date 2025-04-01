@@ -1,5 +1,6 @@
 package com.taskmanager.modules.task.model;
 
+import com.taskmanager.modules.task.dto.TaskCreateRequest;
 import com.taskmanager.modules.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,4 +29,12 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Task(TaskCreateRequest taskCreateRequest, User user) {
+        this.title = taskCreateRequest.title();
+        this.description = taskCreateRequest.description();
+        this.status = taskCreateRequest.status();
+        this.dueAt = taskCreateRequest.dueAt();
+        this.user = user;
+    }
 }
