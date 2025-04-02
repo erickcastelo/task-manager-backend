@@ -1,6 +1,7 @@
 package com.taskmanager.modules.task.model;
 
 import com.taskmanager.modules.task.dto.TaskCreateRequest;
+import com.taskmanager.modules.task.dto.TaskUpdateRequest;
 import com.taskmanager.modules.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Table(name = "tasks")
 @Entity(name = "Task")
@@ -36,5 +38,12 @@ public class Task {
         this.status = taskCreateRequest.status();
         this.dueAt = taskCreateRequest.dueAt();
         this.user = user;
+    }
+
+    public void updateTask(TaskUpdateRequest taskUpdateRequest) {
+        this.title = Objects.requireNonNullElse(taskUpdateRequest.title(), this.title);
+        this.description = Objects.requireNonNullElse(taskUpdateRequest.description(), this.description);
+        this.status = Objects.requireNonNullElse(taskUpdateRequest.status(), this.status);
+        this.dueAt = Objects.requireNonNullElse(taskUpdateRequest.dueAt(), this.dueAt);
     }
 }

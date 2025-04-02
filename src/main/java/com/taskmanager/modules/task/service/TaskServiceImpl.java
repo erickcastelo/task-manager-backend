@@ -1,6 +1,7 @@
 package com.taskmanager.modules.task.service;
 
 import com.taskmanager.modules.task.dto.TaskCreateRequest;
+import com.taskmanager.modules.task.dto.TaskUpdateRequest;
 import com.taskmanager.modules.task.model.Task;
 import com.taskmanager.modules.task.repository.TaskRepository;
 import com.taskmanager.modules.user.model.User;
@@ -23,6 +24,14 @@ public class TaskServiceImpl implements TaskService {
 
         Task task = new Task(taskCreateRequest, user);
         this.taskRepository.save(task);
+
+        return task;
+    }
+
+    @Override
+    public Task updateTask(Long id, TaskUpdateRequest taskUpdateRequest) {
+        Task task = this.taskRepository.getReferenceById(id);
+        task.updateTask(taskUpdateRequest);
 
         return task;
     }
