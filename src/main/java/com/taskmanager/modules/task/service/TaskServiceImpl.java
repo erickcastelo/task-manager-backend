@@ -40,6 +40,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task getReferenceTaskById(Long id) {
+        return this.taskRepository.getReferenceById(id);
+    }
+
+    @Override
     public Task updateTask(Long id, TaskUpdateRequest taskUpdateRequest) {
         Task task = this.taskRepository.getReferenceById(id);
         task.updateTask(taskUpdateRequest);

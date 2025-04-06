@@ -6,6 +6,8 @@ import com.taskmanager.modules.task.dto.TaskUpdateRequest;
 import com.taskmanager.modules.task.model.Task;
 import com.taskmanager.modules.task.model.TaskStatus;
 import com.taskmanager.modules.task.service.TaskService;
+import com.taskmanager.modules.user.dto.UserDetail;
+import com.taskmanager.modules.user.model.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,6 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<Page<TaskDetail>> listTasks(@RequestParam(required = false) TaskStatus status, Pageable pageable) {
-        System.out.println(status);
         Page<TaskDetail> taskDetails = this.taskService.listTasks(pageable, status).map(TaskDetail::new);
         return ResponseEntity.ok(taskDetails);
     }
@@ -46,6 +47,12 @@ public class TaskController {
     public ResponseEntity<TaskDetail> updateTask(@RequestBody @Valid TaskUpdateRequest taskUpdateRequest, @PathVariable Long id) {
         Task task = this.taskService.updateTask(id, taskUpdateRequest);
 
+        return ResponseEntity.ok(new TaskDetail(task));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDetail> getTaskDetail(@PathVariable Long id) {
+        Task task = this.taskService.getReferenceTaskById(id);
         return ResponseEntity.ok(new TaskDetail(task));
     }
 
