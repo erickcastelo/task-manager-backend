@@ -5,6 +5,7 @@ import com.taskmanager.modules.user.dto.UserCreateRequest;
 import com.taskmanager.modules.user.model.User;
 import com.taskmanager.modules.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,5 +28,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getReferenceUserById(Long id) {
         return this.userRepository.getReferenceById(id);
+    }
+
+    @Override
+    public User getUserByEmail(String username) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not found"));
+        return user;
     }
 }
