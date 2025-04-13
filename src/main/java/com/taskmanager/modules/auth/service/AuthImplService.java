@@ -1,6 +1,8 @@
 package com.taskmanager.modules.auth.service;
 
 import com.taskmanager.common.config.JwtConfig;
+import com.taskmanager.modules.user.model.User;
+import com.taskmanager.modules.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +20,9 @@ public class AuthImplService implements AuthService {
     @Autowired
     private JwtConfig jwtConfig;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public String login(String email, String password) {
         try {
@@ -31,5 +36,11 @@ public class AuthImplService implements AuthService {
         } catch (AuthenticationException ex) {
             throw new BadCredentialsException("Email or password invalid.", ex);
         }
+    }
+
+    @Override
+    public User me(String token) {
+        String username = this.jwtConfig.extractUsername(token);
+        return this.userService.getUserByEmail(username);
     }
 }

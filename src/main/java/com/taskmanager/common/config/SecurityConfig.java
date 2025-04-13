@@ -3,7 +3,6 @@ package com.taskmanager.common.config;
 import com.taskmanager.modules.auth.service.AuthDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -29,6 +28,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Sem sessão
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login")
+                        .permitAll()
+                        .requestMatchers("/auth/me/*")
                         .permitAll()
                         .anyRequest().authenticated() // Qualquer outra requisição precisa de autenticação
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
