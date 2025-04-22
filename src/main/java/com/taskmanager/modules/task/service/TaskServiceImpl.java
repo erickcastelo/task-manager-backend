@@ -1,5 +1,6 @@
 package com.taskmanager.modules.task.service;
 
+import com.taskmanager.common.utils.UserUtils;
 import com.taskmanager.modules.task.dto.TaskCreateRequest;
 import com.taskmanager.modules.task.dto.TaskUpdateRequest;
 import com.taskmanager.modules.task.model.Task;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -31,7 +34,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createTask(TaskCreateRequest taskCreateRequest) {
-        User user = this.userService.getReferenceUserById(1L); //TODO: change to logged in user
+        String loggedUser = UserUtils.getLoggedUser();
+        User user = this.userService.getUserByEmail(loggedUser);
 
         Task task = new Task(taskCreateRequest, user);
         this.taskRepository.save(task);
@@ -40,12 +44,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task getReferenceTaskById(Long id) {
+    public Task getReferenceTaskById(UUID id) {
         return this.taskRepository.getReferenceById(id);
     }
 
     @Override
-    public Task updateTask(Long id, TaskUpdateRequest taskUpdateRequest) {
+    public Task updateTask(UUID id, TaskUpdateRequest taskUpdateRequest) {
         Task task = this.taskRepository.getReferenceById(id);
         task.updateTask(taskUpdateRequest);
 
@@ -53,7 +57,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(Long id) {
+    public void deleteTask(UUID id) {
         this.taskRepository.deleteById(id);
     }
 }

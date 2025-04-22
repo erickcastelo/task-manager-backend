@@ -7,6 +7,7 @@ import com.taskmanager.modules.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getReferenceUserById(Long id) {
+    public User getReferenceUserById(UUID id) {
         return this.userRepository.getReferenceById(id);
     }
 

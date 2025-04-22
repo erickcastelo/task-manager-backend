@@ -23,7 +23,7 @@ public class AuthController {
     }
 
     @GetMapping("/me/{token}")
-    public ResponseEntity<UserDetail> me(@PathVariable String token) {
+    public ResponseEntity<UserDetail> me(@PathVariable("token") String token) {
         User user = this.authService.me(token);
         return ResponseEntity.ok(new UserDetail(user));
     }

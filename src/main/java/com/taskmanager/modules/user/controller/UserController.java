@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -30,8 +31,9 @@ public class UserController {
         return ResponseEntity.created(uri).body(new UserDetail(user));
     }
 
+    @Transactional
     @GetMapping("/{id}")
-    public ResponseEntity<UserDetail> getUserDetail(@PathVariable Long id) {
+    public ResponseEntity<UserDetail> getUserDetail(@PathVariable("id") UUID id) {
         User user = this.userService.getReferenceUserById(id);
         return ResponseEntity.ok(new UserDetail(user));
     }

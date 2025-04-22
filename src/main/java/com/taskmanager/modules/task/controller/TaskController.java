@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/tasks")
@@ -27,7 +28,7 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<Page<TaskDetail>> listTasks(@RequestParam(required = false) TaskStatus status, Pageable pageable) {
+    public ResponseEntity<Page<TaskDetail>> listTasks(@RequestParam(value = "status", required = false) TaskStatus status, Pageable pageable) {
         Page<TaskDetail> taskDetails = this.taskService.listTasks(pageable, status).map(TaskDetail::new);
         return ResponseEntity.ok(taskDetails);
     }
@@ -44,20 +45,20 @@ public class TaskController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<TaskDetail> updateTask(@RequestBody @Valid TaskUpdateRequest taskUpdateRequest, @PathVariable Long id) {
+    public ResponseEntity<TaskDetail> updateTask(@RequestBody @Valid TaskUpdateRequest taskUpdateRequest, @PathVariable("id") UUID id) {
         Task task = this.taskService.updateTask(id, taskUpdateRequest);
 
         return ResponseEntity.ok(new TaskDetail(task));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDetail> getTaskDetail(@PathVariable Long id) {
+    public ResponseEntity<TaskDetail> getTaskDetail(@PathVariable("id") UUID id) {
         Task task = this.taskService.getReferenceTaskById(id);
         return ResponseEntity.ok(new TaskDetail(task));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable("id") UUID id) {
         this.taskService.deleteTask(id);
 
         return ResponseEntity.noContent().build();
